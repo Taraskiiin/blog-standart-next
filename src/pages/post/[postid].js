@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import styles from '@/styles/Home.module.css';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 export default function Post() {
   return (
@@ -8,3 +8,9 @@ export default function Post() {
     </>
   );
 }
+
+export const getServerSideProps = withPageAuthRequired(async () => {
+  return {
+    props: {},
+  };
+});
