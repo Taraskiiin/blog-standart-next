@@ -1,15 +1,12 @@
 import { Configuration, OpenAIApi } from "openai";
 
 export default async function handler(req, res) {
+  const { topic, keywords } = req.body;
   const config = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
   });
 
   const openai = new OpenAIApi(config);
-
-  const topic = "top 10 tips for dog owner";
-  const keywords =
-    "first-time dog owners, common dog health issues, best dog breeds";
 
   const response = await openai.createCompletion({
     model: "text-davinci-003",

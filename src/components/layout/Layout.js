@@ -1,10 +1,10 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoins } from '@fortawesome/free-solid-svg-icons';
+import Image from "next/image";
+import Link from "next/link";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCoins } from "@fortawesome/free-solid-svg-icons";
 
-import { Logo } from '../logo';
+import { Logo } from "../logo";
 
 export const Layout = ({ children }) => {
   const { user } = useUser();
@@ -50,7 +50,7 @@ export const Layout = ({ children }) => {
           )}
         </div>
       </div>
-      <div className='bg-yellow-500'>{children}</div>
+      <div className=''>{children}</div>
     </div>
   );
 };
