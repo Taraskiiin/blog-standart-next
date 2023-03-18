@@ -9,8 +9,8 @@ import { Logo } from "../logo";
 export const Layout = ({ children }) => {
   const { user } = useUser();
   return (
-    <div className='grid grid-cols-[300px_1fr] h-screen max-h-screen'>
-      <div className='flex flex-col text-white overflow-hidden'>
+    <div className='grid grid-cols-[300px_1fr] h-screen max-h-screen relative'>
+      <div className='flex flex-col text-white overflow-hidden h-screen fixed'>
         <div className='bg-slate-800 px-2'>
           <Logo />
           <Link href='/post/new' className='btn'>
@@ -50,7 +50,7 @@ export const Layout = ({ children }) => {
           )}
         </div>
       </div>
-      <div className=''>{children}</div>
+      <div className='ml-[300px] w-[calc(100vw-350px)]'>{children}</div>
     </div>
   );
 };

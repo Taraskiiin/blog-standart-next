@@ -63,10 +63,6 @@ export default function NewPost(props) {
           Generate
         </button>
       </form>
-      {/* <div
-        className='max-w-screen-sm p-10'
-        dangerouslySetInnerHTML={{ __html: postContent.postContent }}
-      /> */}
     </>
   );
 }
