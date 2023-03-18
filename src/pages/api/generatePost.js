@@ -65,6 +65,6 @@ export default withApiAuthRequired(async function handler(req, res) {
   });
 
   res.status(200).json({
-    post: response.data.choices[0]?.text,
+    post: post.insertedId,
   });
 });

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRobot } from "@fortawesome/free-solid-svg-icons";
@@ -6,9 +7,9 @@ import { faRobot } from "@fortawesome/free-solid-svg-icons";
 import { Layout } from "../../components/layout";
 
 export default function NewPost(props) {
+  const router = useRouter();
   const [topic, setTopic] = useState("");
   const [keywords, setKeywords] = useState("");
-  const [postContent, setPostContent] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,9 +23,10 @@ export default function NewPost(props) {
     });
 
     const json = await response.json();
-    const string = json.post;
-    console.log(string);
-    setPostContent(JSON.parse(string));
+
+    if (json?.post) {
+      router.push(`/post/${json.post}`);
+    }
   };
 
   return (
@@ -61,10 +63,10 @@ export default function NewPost(props) {
           Generate
         </button>
       </form>
-      <div
+      {/* <div
         className='max-w-screen-sm p-10'
         dangerouslySetInnerHTML={{ __html: postContent.postContent }}
-      />
+      /> */}
     </>
   );
 }
