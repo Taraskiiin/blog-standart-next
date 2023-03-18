@@ -15,7 +15,7 @@ export const Layout = ({
   postId,
 }) => {
   const { user } = useUser();
-  const { setPostsFromSSR, posts } = useContext(PostsContext);
+  const { setPostsFromSSR, posts, getPosts } = useContext(PostsContext);
 
   useEffect(() => {
     setPostsFromSSR(postsFromSSR);
@@ -45,7 +45,9 @@ export const Layout = ({
               {post.topic}
             </Link>
           ))}
-          <div className='hover:underline text-sm text-slate-500 text-center cursor-pointer mt-4 w-fit mx-auto'>
+          <div
+            onClick={() => getPosts(posts[posts.length - 1].created)}
+            className='hover:underline text-sm text-slate-500 text-center cursor-pointer mt-4 w-fit mx-auto'>
             Load more posts
           </div>
         </div>
