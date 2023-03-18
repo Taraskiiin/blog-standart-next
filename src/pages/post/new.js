@@ -65,6 +65,7 @@ export default function NewPost(props) {
               className='resize-none border border-slate-500 w-full block my-2 px-4 py-2 rounded-sm'
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
+              maxLength={100}
             />
           </div>
           <div>
@@ -75,10 +76,14 @@ export default function NewPost(props) {
               className='resize-none border border-slate-500 w-full block my-2 px-4 py-2 rounded-sm'
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
+              maxLength={100}
             />
             <small className='block mb-2'>Separate keywordswith a comma</small>
           </div>
-          <button type='submit' className='btn'>
+          <button
+            type='submit'
+            className='btn'
+            disabled={!topic.trim() || !keywords.trim()}>
             Generate
           </button>
         </form>
@@ -94,6 +99,16 @@ NewPost.getLayout = function getLayout(page, pageProps) {
 export const getServerSideProps = withPageAuthRequired({
   async getServerSideProps(ctx) {
     const props = await getAppProps(ctx);
+
+    if (!props.availableTokens) {
+      return {
+        redirect: {
+          destination: "/token-topup",
+          permanent: "false",
+        },
+      };
+    }
+
     return {
       props,
     };
