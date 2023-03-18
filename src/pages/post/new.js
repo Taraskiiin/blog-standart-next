@@ -4,6 +4,7 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRobot } from "@fortawesome/free-solid-svg-icons";
 
+import { getAppProps } from "../../utils/getAppProps";
 import { Layout } from "../../components/layout";
 
 export default function NewPost(props) {
@@ -71,8 +72,11 @@ NewPost.getLayout = function getLayout(page, pageProps) {
   return <Layout {...pageProps}>{page}</Layout>;
 };
 
-export const getServerSideProps = withPageAuthRequired(async () => {
-  return {
-    props: {},
-  };
+export const getServerSideProps = withPageAuthRequired({
+  async getServerSideProps(ctx) {
+    const props = await getAppProps(ctx);
+    return {
+      props,
+    };
+  },
 });
