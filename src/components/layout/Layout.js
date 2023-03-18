@@ -16,9 +16,7 @@ export const Layout = ({ children, availableTokens, posts, postId }) => {
           <Link href='/post/new' className='btn'>
             New Post
           </Link>
-          <Link
-            href='/token-topup'
-            className='block mt-2 text-center hover:no-underline'>
+          <Link href='/token-topup' className='block mt-2 text-center'>
             <FontAwesomeIcon icon={faCoins} className='text-yellow-500' />
             <span className='pl-1'>{availableTokens} tokens available</span>
           </Link>
@@ -28,7 +26,7 @@ export const Layout = ({ children, availableTokens, posts, postId }) => {
             <Link
               key={post._id}
               href={`/post/${post._id}`}
-              className={`block border border-white/0 text-ellipsis overflow-hidden whitespace-nowrap my-1 p-2 bg-white/10 cursor-pointer rounded-sm hover:no-underline hover:border-white/40 hover:bg-white/20 ${
+              className={`block border border-white/0 text-ellipsis overflow-hidden whitespace-nowrap my-1 p-2 bg-white/10 cursor-pointer rounded-sm hover:border-white/40 hover:bg-white/20 ${
                 postId === post._id && "bg-white/40 border-white/50 "
               }`}>
               {post.topic}
