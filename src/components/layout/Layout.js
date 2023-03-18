@@ -7,7 +7,6 @@ import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import { Logo } from "../logo";
 
 export const Layout = ({ children, availableTokens, posts, postId }) => {
-  console.log(postId);
   const { user } = useUser();
   return (
     <div className='grid grid-cols-[300px_1fr] h-screen max-h-screen relative'>
