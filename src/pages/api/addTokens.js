@@ -1,10 +1,10 @@
 import { getSession } from "@auth0/nextjs-auth0";
-import clientPromiss from "../../lib/mongoDB";
+import clientPromise from "../../lib/mongoDB";
 
 export default async function heandler(req, res) {
   const { user } = await getSession(req, res);
 
-  const client = await clientPromiss;
+  const client = await clientPromise;
   const db = client.db("roblog-next");
 
   const userProfile = await db.collection("users").updateOne(
