@@ -9,29 +9,43 @@ import { Layout } from "../../components/layout";
 
 export default function NewPost(props) {
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState("");
   const [keywords, setKeywords] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const response = await fetch("/api/generatePost", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ topic, keywords }),
-    });
+    try {
+      const response = await fetch("/api/generatePost", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ topic, keywords }),
+      });
 
-    const json = await response.json();
+      const json = await response.json();
 
-    if (json?.post) {
-      router.push(`/post/${json.post}`);
+      if (json?.post) {
+        router.push(`/post/${json.post}`);
+      }
+    } catch (e) {
+      setLoading(false);
+      console.error(e);
     }
   };
 
   return (
     <div className='h-full overflow-hidden'>
+      {loading && (
+        <div className='text-blue-300 flex h-full justify-center items-center'>
+          <h6>Let me think...</h6>
+          <FontAwesomeIcon icon={faRobot} className='text-4xl animate-spin' />
+        </div>
+      )}
       <div className='w-full h-full flex flex-col overflow-auto'>
         <form
           onSubmit={(e) => handleSubmit(e)}
