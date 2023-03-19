@@ -1,35 +1,48 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useReducer, useState } from "react";
 
 const PostsContext = React.createContext({});
 export default PostsContext;
 
-export const PostsProvider = ({ children }) => {
-  const [posts, setPosts] = useState([]);
-  const [noMorePosts, setNoMorePosts] = useState(false);
-
-  const deletePost = useCallback((postId) => {
-    setPosts((value) => {
-      const newPosts = [];
-      value.forEach((post) => {
-        if (post._id !== postId) {
-          newPosts.push(post);
-        }
-      });
-      return newPosts;
-    });
-  }, []);
-
-  const setPostsFromSSR = useCallback((postsFromSSR = []) => {
-    setPosts((value) => {
-      const newPosts = [...value];
-      postsFromSSR.forEach((post) => {
+function postReducer(state, action) {
+  switch (action.type) {
+    case "addPost": {
+      const newPosts = [...state];
+      action.posts.forEach((post) => {
         const exist = newPosts.find((e) => e._id === post._id);
         if (!exist) {
           newPosts.push(post);
         }
       });
       return newPosts;
+    }
+    case "deletePost": {
+      const newPosts = [];
+      state.forEach((post) => {
+        if (post._id !== action.postId) {
+          newPosts.push(post);
+        }
+      });
+      return newPosts;
+    }
+
+    default:
+      return state;
+  }
+}
+
+export const PostsProvider = ({ children }) => {
+  const [posts, dispatch] = useReducer(postReducer, []);
+  const [noMorePosts, setNoMorePosts] = useState(false);
+
+  const deletePost = useCallback((postId) => {
+    dispatch({
+      type: "deletePost",
+      postId,
     });
+  }, []);
+
+  const setPostsFromSSR = useCallback((postsFromSSR = []) => {
+    dispatch({ type: "addPost", posts: postsFromSSR });
   }, []);
 
   const getPosts = useCallback(async (lastPostDate, getNewerPosts = false) => {
@@ -46,16 +59,7 @@ export const PostsProvider = ({ children }) => {
     if (getPostsResults.length < 5) {
       setNoMorePosts(true);
     }
-    setPosts((value) => {
-      const newPosts = [...value];
-      getPostsResults.forEach((post) => {
-        const exist = newPosts.find((e) => e._id === post._id);
-        if (!exist) {
-          newPosts.push(post);
-        }
-      });
-      return newPosts;
-    });
+    dispatch({ type: "addPost", posts: getPostsResults });
   }, []);
 
   return (

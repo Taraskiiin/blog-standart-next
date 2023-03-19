@@ -56,7 +56,7 @@ export const Layout = ({
               {post.topic}
             </Link>
           ))}
-          {!noMorePosts && showMore && (
+          {!noMorePosts && showMore && posts.length > 4 && (
             <div
               onClick={() => getPosts(posts[posts.length - 1].created)}
               className='hover:underline text-sm text-slate-500 text-center
