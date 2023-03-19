@@ -78,7 +78,7 @@ export default function NewPost(props) {
               onChange={(e) => setKeywords(e.target.value)}
               maxLength={100}
             />
-            <small className='block mb-2'>Separate keywordswith a comma</small>
+            <small className='block mb-2'>Separate keywords with a comma</small>
           </div>
           <button
             type='submit'

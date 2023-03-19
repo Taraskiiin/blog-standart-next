@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
-import { DM_Sans, DM_Serif_Display } from "@next/font/google";
+import { DM_Sans, DM_Serif_Display } from "next/font/google";
 
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
