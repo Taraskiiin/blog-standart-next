@@ -16,15 +16,8 @@ function postReducer(state, action) {
       return newPosts;
     }
     case "deletePost": {
-      const newPosts = [];
-      state.forEach((post) => {
-        if (post._id !== action.postId) {
-          newPosts.push(post);
-        }
-      });
-      return newPosts;
+      return state.filter((post) => post._id !== action.postId);
     }
-
     default:
       return state;
   }
