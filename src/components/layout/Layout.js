@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -13,14 +13,24 @@ export const Layout = ({
   availableTokens,
   posts: postsFromSSR,
   postId,
+  postCreated,
 }) => {
+  const [showMore, setShowMore] = useState(true);
   const { user } = useUser();
   const { setPostsFromSSR, posts, getPosts, noMorePosts } =
     useContext(PostsContext);
 
   useEffect(() => {
     setPostsFromSSR(postsFromSSR);
-  }, [postsFromSSR, setPostsFromSSR]);
+
+    if (postId) {
+      const exist = postsFromSSR.find((post) => post._id === postId);
+      if (!exist) {
+        getPosts(postCreated, true);
+        setShowMore(false);
+      }
+    }
+  }, [postsFromSSR, setPostsFromSSR, postId, postCreated, getPosts]);
 
   return (
     <div className='grid grid-cols-[300px_1fr] h-screen max-h-screen relative'>
@@ -46,7 +56,7 @@ export const Layout = ({
               {post.topic}
             </Link>
           ))}
-          {!noMorePosts && (
+          {!noMorePosts && showMore && (
             <div
               onClick={() => getPosts(posts[posts.length - 1].created)}
               className='hover:underline text-sm text-slate-500 text-center
