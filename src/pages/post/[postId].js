@@ -1,3 +1,5 @@
+import React, { useState, useContext } from "react";
+import { useRouter } from "next/router";
 import { getSession } from "@auth0/nextjs-auth0";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { ObjectId } from "mongodb";
@@ -7,8 +9,31 @@ import { getAppProps } from "../../utils/getAppProps";
 
 import clientPromise from "../../lib/mongoDB";
 import { Layout } from "../../components/layout";
+import PostsContext from "../../context/postsContext";
 
 export default function Post(props) {
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const router = useRouter();
+  const { deletePost } = useContext(PostsContext);
+
+  const handlerDeleteConfirm = async () => {
+    try {
+      const response = await fetch("/api/deletePost", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ postId: props.id }),
+      });
+      const json = await response.json();
+
+      if (json.success) {
+        deletePost(props.id);
+        router.replace("/post/new");
+      }
+    } catch (e) {}
+  };
+
   return (
     <div className='overlflow-auto h-full'>
       <div className='max-w-screen-sm mx-auto'>
@@ -34,6 +59,34 @@ export default function Post(props) {
           Blog Post
         </div>
         <div dangerouslySetInnerHTML={{ __html: props.postContent || "" }} />
+        <div className='my-4'>
+          {showDeleteConfirm ? (
+            <div>
+              <p className='p-2 bg-red-300 text-center'>
+                Are you sure you want to delete this post? This action is
+                irreversible
+              </p>
+              <div className='grid grid-cols-2 gap-2'>
+                <button
+                  className='btn'
+                  onClick={() => setShowDeleteConfirm(false)}>
+                  Cancel
+                </button>
+                <button
+                  className='btn hover:underline bg-red-600 hover:bg-red-700'
+                  onClick={handlerDeleteConfirm}>
+                  Confirm delete
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className='btn hover:underline bg-red-600 hover:bg-red-700'>
+              DELETE POST
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -49,13 +102,14 @@ export const getServerSideProps = withPageAuthRequired({
     const userSession = await getSession(ctx.req, ctx.res);
     const client = await clientPromise;
     const db = client.db("roblog-next");
+    const id = ctx.params.postId;
 
     const user = await db.collection("users").findOne({
       auth0id: userSession.user.sub,
     });
 
     const post = await db.collection("posts").findOne({
-      _id: new ObjectId(ctx.params.postId),
+      _id: new ObjectId(id),
       userId: user._id,
     });
 
@@ -70,6 +124,7 @@ export const getServerSideProps = withPageAuthRequired({
 
     return {
       props: {
+        id: id,
         postContent: post.postContent,
         title: post.title,
         metaDescription: post.metaDescription,
