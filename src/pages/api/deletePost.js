@@ -1,6 +1,6 @@
 import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
 import { ObjectId } from "mongodb";
-import clientPromise from "../../lib/mongodb";
+import clientPromise from "../../lib/mongoDB";
 
 export default withApiAuthRequired(async function handler(req, res) {
   try {
