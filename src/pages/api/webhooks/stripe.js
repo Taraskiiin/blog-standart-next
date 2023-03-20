@@ -35,7 +35,7 @@ const handler = async (req, res) => {
         const paymentIntent = event.data.object;
         const auth0id = paymentIntent.metadata.sub;
 
-        const userProfile = await db.collection("users").updateOne(
+        await db.collection("users").updateOne(
           {
             auth0id,
           },

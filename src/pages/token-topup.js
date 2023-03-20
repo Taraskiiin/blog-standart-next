@@ -1,9 +1,8 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { Layout } from "../components/layout";
-
 import { getAppProps } from "../utils/getAppProps";
 
-export default function TokenToPup(props) {
+export default function TokenTopup() {
   const handleClick = async () => {
     const result = await fetch("/api/addTokens", {
       method: "POST",
@@ -22,7 +21,7 @@ export default function TokenToPup(props) {
   );
 }
 
-TokenToPup.getLayout = function getLayout(page, pageProps) {
+TokenTopup.getLayout = function getLayout(page, pageProps) {
   return <Layout {...pageProps}>{page}</Layout>;
 };
 
